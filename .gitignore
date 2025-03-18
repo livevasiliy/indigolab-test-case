@@ -1,0 +1,15 @@
+
+###> symfony/framework-bundle ###
+/.env.local
+/.env.local.php
+/.env.*.local
+/config/secrets/prod/prod.decrypt.private.php
+/public/bundles/
+/var/
+/vendor/
+.env
+.idea/*
+.vscode/*
+docker-compose.yml
+compose.override.yaml
+###< symfony/framework-bundle ###
