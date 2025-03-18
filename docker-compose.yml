@@ -1,0 +1,57 @@
+services:
+  php:
+    build:
+      context: .
+      dockerfile: docker/php-fpm/Dockerfile
+    container_name: pivovarov-vasiliy-php
+    volumes:
+      - ./:/srv/app:cached
+    networks:
+      - app-network
+    depends_on:
+      - redis
+      - database
+
+  nginx:
+    image: nginx:1.21-alpine
+    container_name: pivovarov-vasiliy-nginx
+    volumes:
+      - ./:/srv/app:cached
+      - ./docker/nginx/default.conf:/etc/nginx/nginx.conf
+    networks:
+      - app-network
+    depends_on:
+      - php
+    ports:
+      - published: 8080
+        target: 80
+        protocol: tcp
+
+  database:
+    image: mysql:8.4.4-oracle
+    restart: always
+    container_name: pivovarov-vasiliy-postgres
+    environment:
+      MYSQL_USER: symfony
+      MYSQL_PASSWORD: symfony
+      MYSQL_DB: symfony
+      MYSQL_ROOT_PASSWORD: password
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - app-network
+
+  redis:
+    image: redis:alpine
+    container_name: pivovarov-vasiliy-redis
+    ports:
+      - "6379:6379"
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  mysql-data:
