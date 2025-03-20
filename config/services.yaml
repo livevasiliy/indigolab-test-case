@@ -20,5 +20,28 @@ services:
             - '../src/Entity/'
             - '../src/Kernel.php'
 
-    # add more service definitions when explicit configuration is needed
-    # please note that last definitions always *replace* previous ones
+    App\Controller\RequestCodeController:
+        tags: ['controller.service_arguments']
+
+    Predis\Client:
+
+    # Redis storage
+    App\Service\SmsCode\Storage\RedisSmsCodeStorage:
+        arguments:
+            $client: '@Predis\Client'
+
+    # Database storage
+    App\Service\SmsCode\Storage\DatabaseSmsCodeStorage:
+        arguments:
+            $connection: '@doctrine.dbal.default_connection'
+
+    App\Service\SmsCode\SmsCodeService:
+        arguments:
+            $storage: '@App\Service\SmsCode\Storage\DatabaseSmsCodeStorage'
+            $ttl: 60 # seconds
+
+#   Пример использования разных тип хранилища для хранения SMS кодов
+#    App\Service\SmsCode\SmsCodeService:
+#        arguments:
+#            $storage: '@App\Service\SmsCode\Storage\DatabaseSmsCodeStorage'
+#            $ttl: 60

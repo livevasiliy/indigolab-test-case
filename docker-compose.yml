@@ -28,13 +28,13 @@ services:
         protocol: tcp
 
   database:
-    image: mysql:8.4.4-oracle
+    image: mysql:8.4.0
     restart: always
-    container_name: pivovarov-vasiliy-postgres
+    container_name: pivovarov-vasiliy-database
     environment:
       MYSQL_USER: symfony
       MYSQL_PASSWORD: symfony
-      MYSQL_DB: symfony
+      MYSQL_DATABASE: symfony
       MYSQL_ROOT_PASSWORD: password
     volumes:
       - mysql-data:/var/lib/mysql
